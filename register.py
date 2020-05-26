@@ -67,22 +67,24 @@ def reg(fix_path,fix_label_path,move_path,move_label_path,type='SyN'):
 
     #配准
     # outs = ants.registration(fix_img,move_img,type_of_transforme = 'Affine')
-    # outs = ants.registration( fix_img, move_img, 'ElasticSyN',  multivariate_extras = metrics )  
+    # outs = ants.registration( fix_img, move_img, 'ElasticSyN',  multivariate_extras = metrics )
     # outs = ants.registration( fix_img, move_img, type,verbose=True)
+
     outs = ants.registration( fix_img, move_img, type,reg_iterations=(40, 20, 10))
+    # outs = ants.registration( fix_img, move_img, type,syn_metric='demons',reg_iterations=(40, 20, 10))
 
     #获取配准后的数据，并保存
 
-    ants.image_write(outs['warpedmovout']  ,'./warp_image.nii.gz')
+    # ants.image_write(outs['warpedmovout']  ,'./warp_image.nii.gz')
     if len(outs['fwdtransforms'])!=2:
         return [0]
     #获取move到fix的转换矩阵；将其应用到 move_label上；插值方式选取 最近邻插值; 这个时候也对应的将label变换到 配准后的move图像上
     reg_label_img = ants.apply_transforms(fix_img ,move_label_img,transformlist= outs['fwdtransforms'],interpolator = 'nearestNeighbor')  
     
-    ants.image_write(reg_label_img,'./warp_label.nii.gz')
-    ants.image_write(move_img,'./mv_img.nii.gz')
-    ants.image_write(fix_img,'./fix_img.nii.gz')
-    ants.image_write(fix_label_img,'./fix_label.nii.gz')
+    # ants.image_write(reg_label_img,'./warp_label.nii.gz')
+    # ants.image_write(move_img,'./mv_img.nii.gz')
+    # ants.image_write(fix_img,'./fix_img.nii.gz')
+    # ants.image_write(fix_label_img,'./fix_label.nii.gz')
     return dice_compute(reg_label_img.numpy().astype(np.int32),fix_label_img.numpy().astype(np.int32),indexes=[5])
 
 def test_registration(atlas_imgs,atlas_labs,target_imgs,target_labs,type):
@@ -167,8 +169,6 @@ def init():
 
 
 
-
-
 if __name__=="__main__":
     # fix_path = 'mr_train_1001_image.nii.gz'   
     # fix_label_path = 'ct_train_1013_label.nii.gz'   
@@ -177,6 +177,7 @@ if __name__=="__main__":
     # ret=reg(fix_path,fix_label_path,move_path,move_label_path,type='SyNCC')
     # print(ret)
     # init()
+
     atlas_ct_imgs=glob.glob('../mmwhs/CT_train/205_15/ct-image_crop_man_reg_resize/*.nii.gz')
     atlas_ct_labs=glob.glob('../mmwhs/CT_train/205_15/ct-label_crop_man_reg_resize/*.nii.gz')
     target_ct_imgs=glob.glob('../mmwhs/CT_test/205_5/ct-image_crop_man_reg_resize/*.nii.gz')
