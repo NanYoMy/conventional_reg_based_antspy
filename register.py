@@ -3,6 +3,7 @@
 import glob
 import SimpleITK as sitk
 import ants
+#https://github.com/ANTsX/ANTsPy/issues/85
 #https://blog.csdn.net/weixin_43718675/article/details/102606717#2_antspy_92
 #获取数据路径
 import numpy as np
@@ -68,7 +69,7 @@ def reg(fix_path,fix_label_path,move_path,move_label_path,type='SyN'):
     # outs = ants.registration(fix_img,move_img,type_of_transforme = 'Affine')
     # outs = ants.registration( fix_img, move_img, 'ElasticSyN',  multivariate_extras = metrics )  
     # outs = ants.registration( fix_img, move_img, type,verbose=True)
-    outs = ants.registration( fix_img, move_img, type)
+    outs = ants.registration( fix_img, move_img, type,reg_iterations=(40, 20, 10))
 
     #获取配准后的数据，并保存
 
@@ -208,8 +209,8 @@ if __name__=="__main__":
 
     # test_registration(atlas_ct_imgs,atlas_ct_labs,target_ct_imgs,target_ct_labs,type='ElasticSyN')
     # test_registration(atlas_mr_imgs,atlas_mr_labs,target_mr_imgs,target_mr_labs,type='ElasticSyN')
-    test_registration(atlas_ct_imgs,atlas_ct_labs,target_mr_imgs,target_mr_labs,type='SyNOnly')
-    test_registration(atlas_mr_imgs,atlas_mr_labs,target_ct_imgs,target_ct_labs,type='SyNOnly')
+    test_registration(atlas_ct_imgs,atlas_ct_labs,target_mr_imgs,target_mr_labs,type='ElasticSyN')
+    test_registration(atlas_mr_imgs,atlas_mr_labs,target_ct_imgs,target_ct_labs,type='ElasticSyN')
     # test_registration(atlas_ct_imgs,atlas_ct_labs,target_mr_imgs,target_mr_labs,type='ElasticSyN')
     # test_registration(atlas_mr_imgs,atlas_mr_labs,target_ct_imgs,target_ct_labs,type='ElasticSyN')
     # test_registration(atlas_mr_imgs,atlas_mr_labs,target_ct_imgs,target_ct_labs,type='SyN')
