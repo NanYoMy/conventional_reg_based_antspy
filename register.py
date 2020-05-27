@@ -70,7 +70,8 @@ def reg(fix_path,fix_label_path,move_path,move_label_path,type='SyN'):
     # outs = ants.registration( fix_img, move_img, 'ElasticSyN',  multivariate_extras = metrics )
     # outs = ants.registration( fix_img, move_img, type,verbose=True)
 
-    outs = ants.registration( fix_img, move_img, type,reg_iterations=(40, 20, 10))
+    outs = ants.registration( fix_img, move_img, type,reg_iterations=(10, 10, 20))
+    outs = ants.registration( fix_img, move_img, type,syn_metric='mattes',syn_sampling=5,reg_iterations=(10, 10, 20))
     # outs = ants.registration( fix_img, move_img, type,syn_metric='demons',reg_iterations=(40, 20, 10))
 
     #获取配准后的数据，并保存
